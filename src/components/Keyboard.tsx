@@ -42,14 +42,17 @@ export function Keyboard({ isLetterCorrect, isLetterWrong, isLetterGuessed, onGu
                 key={letter}
                 onClick={() => !disabled && onGuess(letter)}
                 disabled={disabled || guessed}
-                className="font-bold text-xs sm:text-sm rounded-lg sm:rounded-xl select-none transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                className="font-bold rounded-xl select-none focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-95"
                 style={{
-                  width: 'clamp(28px, 8vw, 36px)',
-                  height: 'clamp(36px, 10vw, 46px)',
+                  fontSize: 'clamp(13px, 3.5vw, 18px)',
+                  width: 'clamp(30px, 8.5vw, 46px)',
+                  height: 'clamp(44px, 12vw, 58px)',
                   background: correct
                     ? 'linear-gradient(135deg, #16a34a, #22c55e)'
                     : wrong
                     ? '#fef2f2'
+                    : guessed
+                    ? '#f8fafc'
                     : '#fff',
                   border: correct
                     ? '2px solid #22c55e'
@@ -64,14 +67,15 @@ export function Keyboard({ isLetterCorrect, isLetterWrong, isLetterGuessed, onGu
                     ? '#94a3b8'
                     : '#334155',
                   boxShadow: correct
-                    ? '0 2px 8px rgba(22,163,74,0.25)'
+                    ? '0 3px 10px rgba(22,163,74,0.3)'
                     : wrong
                     ? 'none'
-                    : '0 1px 3px rgba(0,0,0,0.07)',
+                    : '0 2px 4px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)',
                   cursor: guessed || disabled ? 'default' : 'pointer',
+                  touchAction: 'manipulation',
                 }}
-                whileHover={!guessed && !disabled ? { scale: 1.08, y: -2, boxShadow: '0 4px 12px rgba(79,70,229,0.2)' } : {}}
-                whileTap={!guessed && !disabled ? { scale: 0.93 } : {}}
+                whileHover={!guessed && !disabled ? { scale: 1.1, y: -2, boxShadow: '0 6px 16px rgba(79,70,229,0.25)' } : {}}
+                whileTap={!guessed && !disabled ? { scale: 0.9 } : {}}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: (ri * 10 + li) * 0.012, duration: 0.18 }}

@@ -13,7 +13,7 @@ import {
   WIN_STREAK_THRESHOLD,
   LOSS_STREAK_THRESHOLD,
 } from '../types'
-import { getWordForLevel } from '../data/words'
+import { getWordForLevel, getEntryByWord } from '../data/words'
 import type { WordEntry } from '../data/words'
 
 // Tier start levels: novice=1, easy=51, medium=101, hard=151, expert=201
@@ -77,11 +77,21 @@ export interface UseGameStateReturn {
 }
 
 export function useGameState(): UseGameStateReturn {
-  const [state, setState] = useState<GameState>(loadState)
+  const [state, setState] = useState<GameState>(() => {
+    const s = loadState()
+    // Initialize activeWord if missing (first load or old save)
+    if (!s.activeWord) {
+      const entry = getWordForLevel(s.currentLevel, s.solvedWords)
+      return { ...s, activeWord: entry.word.toLowerCase() }
+    }
+    return s
+  })
   const [stats, setStats] = useState<GameStats>(loadStats)
 
-  const wordEntry = getWordForLevel(state.currentLevel, state.solvedWords)
-  const word = wordEntry.word.toLowerCase()
+  // wordEntry: look up by activeWord to get correct hint/tier (frozen until next round)
+  const wordEntry: WordEntry = getEntryByWord(state.activeWord)
+    ?? getWordForLevel(state.currentLevel, state.solvedWords)
+  const word = state.activeWord
   const wrongGuesses = state.guessedLetters.filter(l => !word.includes(l)).length
 
   useEffect(() => { saveState(state) }, [state])
@@ -125,6 +135,7 @@ export function useGameState(): UseGameStateReturn {
           setState({
             ...DEFAULT_STATE,
             currentLevel: jumpLevel,
+            activeWord: word, // keep showing current word until Next is clicked
             winStreak: 0,
             lossStreak: 0,
             status: 'won',
@@ -148,6 +159,7 @@ export function useGameState(): UseGameStateReturn {
           setState({
             ...DEFAULT_STATE,
             currentLevel: dropLevel,
+            activeWord: word, // keep showing current word until Next/Retry is clicked
             winStreak: 0,
             lossStreak: 0,
             status: 'lost',
@@ -166,13 +178,18 @@ export function useGameState(): UseGameStateReturn {
   )
 
   const nextWord = useCallback(() => {
-    setState(prev => ({
-      ...DEFAULT_STATE,
-      currentLevel: prev.currentLevel + 1,
-      winStreak: prev.winStreak,
-      lossStreak: prev.lossStreak,
-      solvedWords: prev.solvedWords,
-    }))
+    setState(prev => {
+      const nextLevel = prev.currentLevel + 1
+      const nextEntry = getWordForLevel(nextLevel, prev.solvedWords)
+      return {
+        ...DEFAULT_STATE,
+        currentLevel: nextLevel,
+        activeWord: nextEntry.word.toLowerCase(),
+        winStreak: prev.winStreak,
+        lossStreak: prev.lossStreak,
+        solvedWords: prev.solvedWords,
+      }
+    })
   }, [])
 
   const retryWord = useCallback(() => {
@@ -181,11 +198,13 @@ export function useGameState(): UseGameStateReturn {
       guessedLetters: [],
       chancesLeft: MAX_CHANCES,
       status: 'playing',
+      // activeWord stays the same — retry same word
     }))
   }, [])
 
   const resetGame = useCallback(() => {
-    setState({ ...DEFAULT_STATE })
+    const entry = getWordForLevel(1, [])
+    setState({ ...DEFAULT_STATE, activeWord: entry.word.toLowerCase() })
     setStats({ ...DEFAULT_STATS })
   }, [])
 

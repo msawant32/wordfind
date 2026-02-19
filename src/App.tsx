@@ -43,7 +43,7 @@ export default function App() {
         <div className="absolute bottom-20 left-10 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.07), transparent 70%)' }} />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center px-3 sm:px-4 pb-8" style={{ maxWidth: '820px', margin: '0 auto', width: '100%' }}>
+      <div className="relative z-10 flex flex-col items-center px-2 sm:px-4 pb-4 sm:pb-8" style={{ maxWidth: '820px', margin: '0 auto', width: '100%' }}>
 
         <div className="w-full">
           <WordAnimation />
@@ -64,7 +64,7 @@ export default function App() {
         </motion.div>
 
         <motion.div
-          className="w-full rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col items-center gap-5"
+          className="w-full rounded-2xl sm:rounded-3xl p-3 sm:p-5 md:p-8 flex flex-col items-center gap-3 sm:gap-5"
           style={{ background: '#fff', border: '1.5px solid #e2e8f0', boxShadow: '0 4px 24px rgba(0,0,0,0.07)' }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

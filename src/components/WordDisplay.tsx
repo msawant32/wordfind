@@ -25,8 +25,8 @@ export function WordDisplay({ word, guessedLetters, status }: WordDisplayProps) 
               <div
                 className="relative flex items-center justify-center rounded-xl transition-all duration-300"
                 style={{
-                  width: '46px',
-                  height: '54px',
+                  width: 'clamp(32px, 10vw, 46px)',
+                  height: 'clamp(38px, 12vw, 54px)',
                   background: isCorrect
                     ? '#f0fdf4'
                     : status === 'lost' && !isCorrect
@@ -47,8 +47,8 @@ export function WordDisplay({ word, guessedLetters, status }: WordDisplayProps) 
                 <AnimatePresence>
                   {isRevealed && (
                     <motion.span
-                      className="font-mono font-black text-2xl uppercase"
-                      style={{ color: isCorrect ? '#16a34a' : '#dc2626' }}
+                      className="font-mono font-black uppercase"
+                      style={{ fontSize: 'clamp(16px, 5vw, 24px)', color: isCorrect ? '#16a34a' : '#dc2626' }}
                       initial={{ scale: 0, rotateY: 90, opacity: 0 }}
                       animate={{ scale: 1, rotateY: 0, opacity: 1 }}
                       exit={{ scale: 0, opacity: 0 }}

@@ -8,7 +8,7 @@ interface HintBadgeProps {
 }
 
 export function HintBadge({ hint, wordLength }: HintBadgeProps) {
-  const [showHint, setShowHint] = useState(false)
+  const [showHint, setShowHint] = useState(true)
 
   return (
     <div className="flex items-center gap-2 flex-wrap justify-center">

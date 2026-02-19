@@ -296,6 +296,10 @@ export function getWordForLevel(level: number, solvedWords: string[] = []): Word
   return pool[indexInTier]
 }
 
+export function getEntryByWord(word: string): WordEntry | undefined {
+  return WORDS.find(w => w.word === word.toLowerCase())
+}
+
 export function getTierForLevel(level: number): Tier {
   if (level <= 50) return 'novice'
   if (level <= 100) return 'easy'

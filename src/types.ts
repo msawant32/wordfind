@@ -5,6 +5,7 @@ export type GameStatus = 'playing' | 'won' | 'lost'
 export interface GameState {
   version: number
   currentLevel: number
+  activeWord: string        // frozen word for the current round
   guessedLetters: string[]
   chancesLeft: number
   status: GameStatus
@@ -29,6 +30,7 @@ export const LOSS_STREAK_THRESHOLD = 5
 export const DEFAULT_STATE: GameState = {
   version: 1,
   currentLevel: 1,
+  activeWord: '',
   guessedLetters: [],
   chancesLeft: MAX_CHANCES,
   status: 'playing',
